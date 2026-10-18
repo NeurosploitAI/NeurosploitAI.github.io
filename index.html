@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NeuroSploit — Autonomous AI Penetration-Testing Harness</title>
+<meta name="description" content="NeuroSploit is an autonomous, multi-model penetration-testing harness written in Rust. The harness is the pentester — recon, exploit, wire-check, cross-model vote, chain and report, with every claim backed by a receipt." />
+<meta name="theme-color" content="#06060a" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="NeuroSploit — Autonomous AI Penetration-Testing Harness" />
+<meta property="og:description" content="The harness is the pentester, not the model. Autonomous, multi-model, CLI-first, open source (MIT)." />
+<meta property="og:url" content="https://neurosploitai.github.io/" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="NeuroSploit home">
+      <span class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="url(#ng)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="ng" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+          <circle cx="12" cy="12" r="2.3"/><circle cx="5" cy="6" r="1.6"/><circle cx="19" cy="6" r="1.6"/><circle cx="5" cy="18" r="1.6"/><circle cx="19" cy="18" r="1.6"/>
+          <path d="M6.4 7 10 10.5M17.6 7 14 10.5M6.4 17 10 13.5M17.6 17 14 13.5"/>
+        </svg>
+      </span>
+      <span>Neuro<b>Sploit</b></span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#thesis">Philosophy</a>
+      <a href="#how">How it works</a>
+      <a href="#modes">Modes</a>
+      <a href="#features">Features</a>
+      <a href="#agents">Agents</a>
+      <a href="docs.html" target="_blank" rel="noopener">Docs ↗</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="nav-star" href="https://github.com/JoasASantos/NeuroSploit" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+        Star
+      </a>
+      <a class="btn btn-primary" href="docs.html" target="_blank" rel="noopener">Get started</a>
+      <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <canvas id="neural-canvas"></canvas>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="hero-badge"><span class="tag">v4.3.1</span> Rust · tokio · MIT · open source</span>
+        <h1>
+          <span class="line">The harness is the</span>
+          <span class="line gradient-text">pentester.</span>
+          <span class="line">Not the model.</span>
+        </h1>
+        <p class="lead">
+          NeuroSploit is an autonomous, multi-model penetration-testing harness.
+          Point it at a URL, a repo, a running app or a host — a Rust engine runs the
+          methodology, proves every claim on the wire, and hands you a report.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="docs.html" target="_blank" rel="noopener">
+            Read the docs
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost btn-lg" href="https://github.com/JoasASantos/NeuroSploit" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+        <div class="hero-meta">
+          <div class="m"><b data-count="486">0</b><span>markdown agents</span></div>
+          <div class="m"><b data-count="19">0</b><span>LLM providers</span></div>
+          <div class="m"><b data-count="8">0</b><span>engagement modes</span></div>
+          <div class="m"><b>MIT</b><span>fully open source</span></div>
+        </div>
+      </div>
+
+      <!-- terminal -->
+      <div class="terminal reveal">
+        <div class="terminal-bar">
+          <span class="dots"><i></i><i></i><i></i></span>
+          <span class="title">neurosploit — run</span>
+        </div>
+        <div class="terminal-body" id="term"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROVIDERS MARQUEE ============ -->
+<div class="marquee-wrap">
+  <div class="wrap"><p class="marquee-label">Runs on your API keys or a local subscription — 19 providers</p></div>
+  <div class="marquee-mask">
+    <div class="marquee" id="marquee">
+      <span>anthropic:claude-opus</span><span>openai:gpt-5.5</span><span>gemini:gemini-3-pro</span><span>xai:grok-4.7</span><span>nvidia_nim</span><span>deepseek</span><span>mistral</span><span>qwen</span><span>groq</span><span>together</span><span>moonshot:kimi-k3</span><span>openrouter</span><span>ollama · local</span><span>llamacpp · CPU</span><span>litellm proxy</span>
+      <span>anthropic:claude-opus</span><span>openai:gpt-5.5</span><span>gemini:gemini-3-pro</span><span>xai:grok-4.7</span><span>nvidia_nim</span><span>deepseek</span><span>mistral</span><span>qwen</span><span>groq</span><span>together</span><span>moonshot:kimi-k3</span><span>openrouter</span><span>ollama · local</span><span>llamacpp · CPU</span><span>litellm proxy</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ THESIS ============ -->
+<section class="section" id="thesis">
+  <div class="wrap thesis">
+    <span class="eyebrow reveal"><span class="dot"></span>The core idea</span>
+    <p class="big reveal d1">
+      Instead of asking one LLM to <em>"hack this"</em>, a Rust engine runs the methodology —
+      it picks the <span class="gradient-text">specialist agents</span> that fit what it finds,
+      runs them in parallel, re-sends every claim over the wire, and has a
+      <span class="gradient-text">second model</span> check each finding before it's reported.
+    </p>
+    <p class="reveal d2">The LLMs are the hands; the harness is the discipline that keeps them honest. That's why it finds more and invents less than running a model directly.</p>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section" id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="dot"></span>The pipeline</span>
+      <h2>Seven disciplined stages, every run</h2>
+      <p>An engagement is a fixed methodology — not a single prompt. The engine drives each stage and gates the next on proof.</p>
+    </div>
+    <div class="pipeline reveal d1">
+      <div class="pipe-step"><div class="n">01</div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><h4>Recon</h4><p>Maps the surface with real tools — curl, nmap, ffuf, JS-bundle route discovery.</p></div>
+      <div class="pipe-step"><div class="n">02</div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg><h4>Select</h4><p>Picks only the agents whose preconditions match the recon — never blindly runs all 486.</p></div>
+      <div class="pipe-step"><div class="n">03</div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 11h7l-1 9 9-11h-7l1-9z"/></svg><h4>Exploit</h4><p>Specialists work in parallel ReAct loops — each must prove its claim with a tool receipt.</p></div>
+      <div class="pipe-step"><div class="n">04</div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2 6 4-12 2 6h4"/></svg><h4>Wire-check</h4><p>The harness re-sends every exchange through a scope-guarded replay engine.</p></div>
+      <div class="pipe-step"><div class="n">05</div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg><h4>Vote</h4><p>A different model adjudicates each candidate — cross-model voting cuts false positives.</p></div>
+      <div class="pipe-step"><div class="n">06</div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12M18 9v12M6 15a6 6 0 0 0 6 6 6 6 0 0 0 6-6"/><circle cx="6" cy="3" r="0"/></svg><h4>Chain</h4><p>Confirmed findings chain into deeper impact — SQLi→RCE, SSRF→cloud — each stage proven.</p></div>
+      <div class="pipe-step"><div class="n">07</div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg><h4>Report</h4><p>HTML · PDF · JSON · SARIF, with an OWASP / CWE / MITRE-mapped attack graph, secrets redacted.</p></div>
+    </div>
+    <p class="reveal d2" style="text-align:center;margin-top:34px;color:var(--text-faint);font-family:var(--mono);font-size:13.5px">
+      It won't invent findings: <span style="color:var(--violet-soft)">every claim needs a receipt</span> — raw tool output or a <span style="color:var(--cyan)">file:line</span>.
+    </p>
+  </div>
+</section>
+
+<!-- ============ MODES ============ -->
+<section class="section" id="modes" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="dot"></span>Engagement modes</span>
+      <h2>One harness, every surface</h2>
+      <p>From a black-box URL to source review, running apps, infrastructure, AI systems and mobile binaries.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card mode-card reveal"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></div><h3>Black-box</h3><p>Recon → select → exploit → vote → report against a live URL.</p><div class="cmd-line">neurosploit run &lt;url&gt;</div></div>
+      <div class="card mode-card reveal d1"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></div><h3>White-box</h3><p>Source / SAST review tracing source→sink with file:line evidence.</p><div class="cmd-line">neurosploit whitebox &lt;repo&gt;</div></div>
+      <div class="card mode-card reveal d2"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18"/></svg></div><h3>Grey-box</h3><p>Code review <b>+</b> live exploitation — code leads proven on the running app.</p><div class="cmd-line">neurosploit greybox &lt;repo&gt; --url</div></div>
+      <div class="card mode-card reveal"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="6" rx="2"/><path d="M6 8h.01M6 17h.01"/></svg></div><h3>Host / Infra</h3><p>Linux / Windows / AD + cloud (AWS/GCP/Azure) with creds.yaml.</p><div class="cmd-line">neurosploit host &lt;ip&gt;</div></div>
+      <div class="card mode-card reveal d1"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 10h.01M15 10h.01M9 15h6"/></svg></div><h3>AI / LLM</h3><p>Jailbreaks, prompt injection, OWASP LLM Top 10 &amp; MCP threats.</p><div class="cmd-line">neurosploit aitest &lt;ai-url&gt;</div></div>
+      <div class="card mode-card reveal d2"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h3>Mobile / Binary</h3><p>RE a local APK/IPA/binary — Ghidra, MobSF, Frida, headless.</p><div class="cmd-line">neurosploit mobile &lt;app&gt;</div></div>
+      <div class="card mode-card reveal"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V7a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 7v10a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div><h3>Container</h3><p>OCI image scan + SBOM via trivy / grype / syft.</p><div class="cmd-line">neurosploit container &lt;image&gt;</div></div>
+      <div class="card mode-card reveal d1"><div class="card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h6M7 16h8"/></svg></div><h3>Mission Control</h3><p>Live TUI panels + a composer you type into mid-run.</p><div class="cmd-line">neurosploit tui &lt;url&gt;</div></div>
+      <div class="card mode-card reveal d2" style="display:flex;align-items:center;justify-content:center;text-align:center;background:var(--bg-2)">
+        <div><p style="margin-bottom:14px;color:var(--text-dim)">Prefer a browser? A web console drives the <b>same CLI</b> — no second engine.</p>
+        <a class="btn btn-ghost" href="docs.html#web-console" target="_blank" rel="noopener">Web console →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS BAND ============ -->
+<section class="stats-band section-sm" style="padding:0">
+  <div class="wrap" style="max-width:100%;padding:0">
+    <div class="stats-grid wrap" style="padding:0 24px">
+      <div class="stat reveal"><div class="num" data-count="486" data-suffix="">0</div><div class="lbl">markdown agents across 7 categories</div></div>
+      <div class="stat reveal d1"><div class="num" data-count="255" data-suffix="+">0</div><div class="lbl">vulnerability specialist agents</div></div>
+      <div class="stat reveal d2"><div class="num" data-count="78" data-suffix="">0</div><div class="lbl">white-box SAST source agents</div></div>
+      <div class="stat reveal d3"><div class="num" data-count="100" data-suffix="%">0</div><div class="lbl">evidence-backed — no receipt, no finding</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES (split rows) ============ -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow"><span class="dot"></span>What makes it different</span>
+      <h2>Discipline you can audit</h2>
+      <p>Four safeguards that are part of the process, not a flag you remember to set.</p>
+    </div>
+
+    <!-- row 1: wire evidence -->
+    <div class="feature-row">
+      <div class="reveal">
+        <h3>Wire-bound evidence</h3>
+        <p>Every exchange an agent reports is re-sent by the harness itself through a scope-guarded replay engine and checked against recorded traffic. A claim the wire contradicts can't stand as confirmed.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Deterministic validators judge real response bytes, not the model's prose.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Per-CWE grading: SQLi that extracted nothing scores demonstrated 0, not a fake critical.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>What can't be checked stays flagged <span style="color:var(--text)">unverifiable</span> — never silently promoted.</li>
+        </ul>
+      </div>
+      <div class="fr-media reveal d1">
+        <div class="evidence">
+          <div class="ev-head"><span>finding · idor-user-object</span><span>wire-check: 2 reproduced</span></div>
+          <div class="ev-row"><span class="method">GET</span><span class="muted">/api/users/1001/invoice</span><span class="badge-wire replay">wire:replay</span></div>
+          <div class="ev-row"><span class="method">GET</span><span class="muted">/api/users/1002/invoice</span><span class="badge-wire verified">wire-verified</span></div>
+          <div class="ev-row"><span class="method">POST</span><span class="muted">/api/login (identity B)</span><span class="badge-wire replay">wire:recorded</span></div>
+          <div class="ev-row"><span class="method">PUT</span><span class="muted">/api/users/1002/role=admin</span><span class="badge-wire contra">unverifiable</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- row 2: attack graph -->
+    <div class="feature-row reverse">
+      <div class="reveal">
+        <h3>Attack knowledge graph</h3>
+        <p>The run is a typed graph of hosts, services, findings, credentials and impact — spanning web <b>and</b> the internal network. It directs the next move during the run, and is written to <code style="font-family:var(--mono);color:var(--cyan)">graph/</code> even with no database (Neo4j optional).</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>A graph checkpoint runs after recon, at validation, each chaining round and at the end.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Every edge marked confirmed / needs-validation / hypothesis, ordered by kill-chain stage.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Cypher + JSON export; <code style="font-family:var(--mono);color:var(--cyan)">choke_points</code> finds the single edge that cuts the most paths.</li>
+        </ul>
+      </div>
+      <div class="fr-media reveal d1">
+        <div class="graph-viz">
+          <svg viewBox="0 0 440 300" id="graphSvg" fill="none">
+            <g stroke="rgba(139,92,246,.35)" stroke-width="1.5">
+              <line class="gedge" x1="70" y1="60" x2="200" y2="60"/>
+              <line class="gedge" x1="200" y1="60" x2="330" y2="40"/>
+              <line class="gedge" x1="200" y1="60" x2="330" y2="110"/>
+              <line class="gedge" x1="330" y1="110" x2="330" y2="200"/>
+              <line class="gedge" x1="70" y1="180" x2="200" y2="180"/>
+              <line class="gedge" x1="200" y1="180" x2="330" y2="200"/>
+              <line class="gedge" x1="330" y1="200" x2="380" y2="260"/>
+            </g>
+            <g>
+              <g class="gnode"><circle cx="70" cy="60" r="12" fill="#0e0e18" stroke="#22d3ee" stroke-width="2"/><text class="node-label" x="70" y="88" text-anchor="middle">host</text></g>
+              <g class="gnode"><circle cx="200" cy="60" r="12" fill="#0e0e18" stroke="#8b5cf6" stroke-width="2"/><text class="node-label" x="200" y="88" text-anchor="middle">service</text></g>
+              <g class="gnode"><circle cx="330" cy="40" r="12" fill="#0e0e18" stroke="#8b5cf6" stroke-width="2"/><text class="node-label" x="330" y="26" text-anchor="middle">SSRF</text></g>
+              <g class="gnode"><circle cx="330" cy="110" r="12" fill="#0e0e18" stroke="#ff9f45" stroke-width="2"/><text class="node-label" x="364" y="114" text-anchor="start">SQLi</text></g>
+              <g class="gnode"><circle cx="70" cy="180" r="12" fill="#0e0e18" stroke="#22d3ee" stroke-width="2"/><text class="node-label" x="70" y="208" text-anchor="middle">identity</text></g>
+              <g class="gnode"><circle cx="200" cy="180" r="12" fill="#0e0e18" stroke="#8b5cf6" stroke-width="2"/><text class="node-label" x="200" y="208" text-anchor="middle">cred</text></g>
+              <g class="gnode"><circle cx="330" cy="200" r="13" fill="#0e0e18" stroke="#ff5c7a" stroke-width="2.4"/><text class="node-label" x="330" y="228" text-anchor="middle">RCE</text></g>
+              <g class="gnode"><circle cx="380" cy="260" r="14" fill="rgba(255,92,122,.12)" stroke="#ff5c7a" stroke-width="2.6"/><text class="node-label" x="380" y="288" text-anchor="middle" fill="#ff5c7a">impact</text></g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- row 3 -->
+    <div class="feature-row">
+      <div class="reveal">
+        <h3>Secrets never leak the report</h3>
+        <p>Credentials the agents observe become <code style="font-family:var(--mono);color:var(--violet-soft)">$SECRET_n</code> placeholders across every human-facing report — the same secret keeps the same placeholder, so an attack chain stays readable. Raw values live only in the run's vault, for re-testing.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Redaction is always on — report.md, html, json, sarif, pdf and findings.md.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Graph properties store salted fingerprints — never a raw secret, body or narrative.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Nothing about your targets leaves your machine unless you send it.</li>
+        </ul>
+      </div>
+      <div class="fr-media reveal d1">
+        <div class="codeblock" style="border:0">
+          <div class="cb-bar"><span>report.md — redacted</span></div>
+          <pre><code><span class="tok-comment"># Attack chain</span>
+Logged in as <span class="tok-cmd">admin</span> with <span class="tok-flag">$SECRET_1</span>,
+which also unlocked <span class="tok-flag">$SECRET_1</span> on the API.
+
+<span class="tok-comment"># raw values live only in:</span>
+.neurosploit/vault/&lt;run-id&gt;.json
+findings.json   <span class="tok-comment"># for re-test</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- row 4: pomdp / deterministic -->
+    <div class="feature-row reverse">
+      <div class="reveal">
+        <h3>It reasons about uncertainty</h3>
+        <p>NeuroSploit treats the target as partially observable — a POMDP. A belief world-model carries probabilities, an anti-hallucination gate forbids claiming exploitability while the belief is diffuse, and value-of-information decides scan-more vs. exploit-now.</p>
+        <ul class="feature-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Grounding gate: empirical for black-box/host/AI, symbolic file:line for white-box.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Evidence-graded CVSS from the FIRST v3.1 equation — the vector travels with the number.</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Hash-chained audit trail, signed anchors, and a P1–P5 assurance manifest.</li>
+        </ul>
+      </div>
+      <div class="fr-media reveal d1">
+        <div class="codeblock" style="border:0">
+          <div class="cb-bar"><span>belief · grounding gate</span></div>
+          <pre><code><span class="tok-kw">may_assert</span>(sqli) = <span class="tok-str">false</span>
+  <span class="tok-comment">// belief diffuse → observe more first</span>
+
+<span class="tok-cmd">[grounding]</span>  receipt required
+<span class="tok-cmd">[cvss]</span>       demonstrated <span class="tok-str">0.0</span> / potential <span class="tok-str">9.8</span>
+<span class="tok-cmd">[vote]</span>       gpt + gemini → <span style="color:var(--low)">confirmed ✓</span>
+<span class="tok-cmd">[chain]</span>      SQLi → RCE → LPE</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AGENT LIBRARY ============ -->
+<section class="section" id="agents" style="padding-top:0">
+  <div class="wrap">
+    <div class="grid grid-2" style="align-items:center;gap:56px">
+      <div class="reveal">
+        <span class="eyebrow"><span class="dot"></span>The agent library</span>
+        <h2 style="font-size:clamp(28px,4vw,42px);margin:18px 0 16px">486 agents you can read, edit and extend</h2>
+        <p style="color:var(--text-dim);font-size:16px;margin-bottom:22px">Each agent is a self-contained markdown playbook — a methodology plus strict anti-false-positive rules. Drop a <code style="font-family:var(--mono);color:var(--cyan)">.md</code> into the matching folder and it's picked up automatically.</p>
+        <div class="tag-row" style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="chip">vulns/</span><span class="chip">recon/</span><span class="chip">code/</span><span class="chip">infra/</span><span class="chip">chains/</span><span class="chip">ai/</span><span class="chip">meta/</span>
+        </div>
+      </div>
+      <div class="reveal d1">
+        <div class="agent-bars" id="agentBars">
+          <div class="agent-bar"><div class="ab-name">Vulnerability <small>vulns/</small></div><div class="ab-track"><div class="ab-fill" data-pct="100"></div></div><div class="ab-val" data-count="241">0</div></div>
+          <div class="agent-bar"><div class="ab-name">Code / SAST <small>code/</small></div><div class="ab-track"><div class="ab-fill" data-pct="32"></div></div><div class="ab-val" data-count="78">0</div></div>
+          <div class="agent-bar"><div class="ab-name">Infra <small>infra/</small></div><div class="ab-track"><div class="ab-fill" data-pct="14"></div></div><div class="ab-val" data-count="34">0</div></div>
+          <div class="agent-bar"><div class="ab-name">AI / LLM <small>ai/</small></div><div class="ab-track"><div class="ab-fill" data-pct="12"></div></div><div class="ab-val" data-count="30">0</div></div>
+          <div class="agent-bar"><div class="ab-name">Meta <small>meta/</small></div><div class="ab-track"><div class="ab-fill" data-pct="10"></div></div><div class="ab-val" data-count="23">0</div></div>
+          <div class="agent-bar"><div class="ab-name">Chains <small>chains/</small></div><div class="ab-track"><div class="ab-fill" data-pct="5"></div></div><div class="ab-val" data-count="12">0</div></div>
+          <div class="agent-bar"><div class="ab-name">Recon <small>recon/</small></div><div class="ab-track"><div class="ab-fill" data-pct="5"></div></div><div class="ab-val" data-count="12">0</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSTALL / QUICKSTART ============ -->
+<section class="section" id="install" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-bottom:36px">
+      <span class="eyebrow"><span class="dot"></span>Quick start</span>
+      <h2>Up and running in two commands</h2>
+      <p>The installer sets up Rust if missing, builds the release binary, and links <code style="font-family:var(--mono);color:var(--cyan)">neurosploit</code> onto your PATH.</p>
+    </div>
+    <div class="grid grid-2">
+      <div class="codeblock reveal">
+        <div class="cb-bar"><span>install — Linux / macOS</span><button class="copy-btn" data-copy="curl -fsSL https://raw.githubusercontent.com/JoasASantos/NeuroSploit/main/setup.sh | bash">copy</button></div>
+        <pre><code><span class="tok-comment"># Linux / macOS (x64 &amp; arm64)</span>
+<span class="tok-cmd">curl</span> <span class="tok-flag">-fsSL</span> https://raw.githubusercontent.com/\
+JoasASantos/NeuroSploit/main/setup.sh | <span class="tok-cmd">bash</span>
+
+<span class="tok-comment"># Windows (PowerShell)</span>
+<span class="tok-cmd">irm</span> .../install.ps1 | <span class="tok-cmd">iex</span></code></pre>
+      </div>
+      <div class="codeblock reveal d1">
+        <div class="cb-bar"><span>run — black-box</span><button class="copy-btn" data-copy="neurosploit run http://testphp.vulnweb.com/ --subscription --model anthropic:claude-opus-4-8 -v">copy</button></div>
+        <pre><code><span class="tok-comment"># just run it — the REPL asks everything</span>
+<span class="tok-cmd">neurosploit</span>
+
+<span class="tok-comment"># black-box, subscription login (no API key)</span>
+<span class="tok-cmd">neurosploit</span> run http://testphp.vulnweb.com/ \
+  <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">-v</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta reveal">
+      <span class="eyebrow"><span class="dot"></span>Open source · MIT</span>
+      <h2>Give the harness a target.</h2>
+      <p>Read the full tutorial — auth, modes, scope, the REPL, the attack graph, the web console and the complete command reference.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="docs.html" target="_blank" rel="noopener">Open the docs ↗</a>
+        <a class="btn btn-ghost btn-lg" href="https://github.com/JoasASantos/NeuroSploit" target="_blank" rel="noopener">Star on GitHub</a>
+      </div>
+      <div class="cta-install">
+        <span class="dollar">$</span><code>curl -fsSL .../setup.sh | bash</code>
+        <button class="copy-btn" data-copy="curl -fsSL https://raw.githubusercontent.com/JoasASantos/NeuroSploit/main/setup.sh | bash">copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#top"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="url(#ng2)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="ng2" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><circle cx="12" cy="12" r="2.3"/><circle cx="5" cy="6" r="1.6"/><circle cx="19" cy="6" r="1.6"/><circle cx="5" cy="18" r="1.6"/><circle cx="19" cy="18" r="1.6"/><path d="M6.4 7 10 10.5M17.6 7 14 10.5M6.4 17 10 13.5M17.6 17 14 13.5"/></svg></span><span>Neuro<b>Sploit</b></span></a>
+        <p>Autonomous, multi-model penetration-testing harness. The harness is the pentester. By Joas A Santos &amp; Red Team Leaders.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Product</h5>
+        <a href="#how">How it works</a><a href="#modes">Modes</a><a href="#features">Features</a><a href="#agents">Agent library</a>
+      </div>
+      <div class="footer-col">
+        <h5>Docs</h5>
+        <a href="docs.html" target="_blank" rel="noopener">Tutorial</a><a href="docs.html#install" target="_blank" rel="noopener">Install</a><a href="docs.html#repl" target="_blank" rel="noopener">The REPL</a><a href="docs.html#reference" target="_blank" rel="noopener">Command reference</a>
+      </div>
+      <div class="footer-col">
+        <h5>Project</h5>
+        <a href="https://github.com/JoasASantos/NeuroSploit" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/JoasASantos/NeuroSploit/blob/main/TUTORIAL.md" target="_blank" rel="noopener">TUTORIAL.md</a><a href="https://github.com/JoasASantos/NeuroSploit/blob/main/BENCHMARK.md" target="_blank" rel="noopener">Benchmark</a><a href="https://github.com/JoasASantos/NeuroSploit/issues" target="_blank" rel="noopener">Issues</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 NeuroSploit · MIT License · Authorized testing only.</span>
+      <span class="mono">harness = discipline · llm = hands</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

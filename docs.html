@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NeuroSploit Docs — Tutorial & User Guide</title>
+<meta name="description" content="The complete, hands-on guide to installing, configuring and running NeuroSploit — the autonomous, multi-model penetration-testing harness. Auth, modes, scope, the REPL, attack graph, web console and full command reference." />
+<meta name="theme-color" content="#06060a" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" />
+<link rel="stylesheet" href="assets/css/docs.css" />
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:14px">
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <a class="brand" href="index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="url(#g)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><circle cx="12" cy="12" r="2.3"/><circle cx="5" cy="6" r="1.6"/><circle cx="19" cy="6" r="1.6"/><circle cx="5" cy="18" r="1.6"/><circle cx="19" cy="18" r="1.6"/><path d="M6.4 7 10 10.5M17.6 7 14 10.5M6.4 17 10 13.5M17.6 17 14 13.5"/></svg></span>
+      <span>Neuro<b>Sploit</b></span>
+      <span class="doctag">docs v4.3.1</span>
+    </a>
+  </div>
+  <div class="topbar-right">
+    <div class="doc-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" id="docSearch" placeholder="Search docs…" autocomplete="off" />
+    </div>
+    <a class="site-link label-hide" href="index.html">← Home</a>
+    <a class="gh" href="https://github.com/JoasASantos/NeuroSploit" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <nav>
+      <div class="nav-group">
+        <p class="grp-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m13 2-9 11h7l-1 9 9-11h-7l1-9z"/></svg>Getting started</p>
+        <a href="#intro">Introduction</a>
+        <a href="#concepts">Concepts in 60 seconds</a>
+        <a href="#install">Install</a>
+        <a href="#auth">Authentication</a>
+        <a href="#models">Choosing models</a>
+      </div>
+      <div class="nav-group">
+        <p class="grp-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg>Engagement modes</p>
+        <a href="#blackbox">Black-box (URL)</a>
+        <a href="#whitebox">White-box (source)</a>
+        <a href="#greybox">Grey-box (code + live)</a>
+        <a href="#host">Host / Infra / AD</a>
+        <a href="#ai">AI / LLM red-teaming</a>
+        <a href="#mobile">Mobile / binary</a>
+        <a href="#container">Container</a>
+      </div>
+      <div class="nav-group">
+        <p class="grp-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h6M7 16h8"/></svg>Operating it</p>
+        <a href="#repl">The interactive REPL</a>
+        <a href="#scope">Scope &amp; authorization</a>
+        <a href="#potent">The potent run recipe</a>
+        <a href="#creds">Credentials (creds.yaml)</a>
+        <a href="#accounts">Test accounts &amp; vault</a>
+        <a href="#tui">Mission Control TUI</a>
+        <a href="#web-console">Web console</a>
+        <a href="#mcp">MCP server</a>
+      </div>
+      <div class="nav-group">
+        <p class="grp-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="1.6"/><circle cx="19" cy="6" r="1.6"/><path d="M6.4 7 10 10.5M17.6 7 14 10.5"/></svg>Internals</p>
+        <a href="#graph">Attack graph &amp; Neo4j</a>
+        <a href="#wire">Wire-bound evidence</a>
+        <a href="#decide">How it decides</a>
+        <a href="#agents">The agent library</a>
+        <a href="#assurance">Assurance &amp; authorization</a>
+      </div>
+      <div class="nav-group">
+        <p class="grp-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Reference</p>
+        <a href="#outputs">Outputs &amp; artifacts</a>
+        <a href="#troubleshoot">Tips &amp; troubleshooting</a>
+        <a href="#reference">Command &amp; flag reference</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content" id="content">
+
+    <div class="doc-hero" id="intro">
+      <p class="kicker">Tutorial &amp; User Guide · v4.3.1</p>
+      <h1>Run NeuroSploit</h1>
+      <p>A complete, hands-on guide to installing, configuring and running NeuroSploit — the autonomous, multi-model penetration-testing harness. CLI-first, open source, MIT.</p>
+    </div>
+
+    <div class="callout warn">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <p><strong>Authorized testing only.</strong> Every agent is instructed to stay in scope and never run destructive / DoS actions. You are responsible for having written permission for any target you point it at.</p>
+    </div>
+
+    <!-- CONCEPTS -->
+    <section id="concepts">
+      <h2 class="anchor-h">Concepts in 60 seconds <a class="hash" href="#concepts">#</a></h2>
+      <p>You give NeuroSploit a <strong>target</strong> — a URL, repo, app, or host/IP. It then:</p>
+      <ol class="steps">
+        <li><strong>Recons</strong> the target with real tools (curl / nmap / ffuf…).</li>
+        <li><strong>Intelligently selects</strong> only the agents whose preconditions match the recon — it does <em>not</em> blindly run all 486.</li>
+        <li><strong>Exploits</strong> in parallel — each agent works in a ReAct loop and must prove its claim with a <strong>tool receipt</strong> (raw output).</li>
+        <li><strong>Validates</strong> every candidate by <strong>cross-model voting</strong> (a different model adjudicates) and a <strong>grounding gate</strong> (no claim without a receipt).</li>
+        <li><strong>Chains</strong> confirmed findings into deeper impact (SQLi→RCE, SSRF→cloud…).</li>
+        <li><strong>Reports</strong> — HTML + Typst PDF + JSON/MD, with an attack-graph / kill-chain mapped to OWASP / CWE / MITRE ATT&amp;CK.</li>
+      </ol>
+      <p>It runs on a <strong>pool of LLMs</strong> you choose, authenticated either by <strong>API key</strong> or your local <strong>subscription</strong> (Claude Code / Codex / Gemini / Grok CLI).</p>
+      <div class="callout note">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p><strong>The key idea:</strong> the harness is the pentester, not the model. The LLMs are the hands; the Rust engine is the discipline that keeps them honest.</p>
+      </div>
+    </section>
+
+    <!-- INSTALL -->
+    <section id="install">
+      <h2 class="anchor-h">Install <a class="hash" href="#install">#</a></h2>
+      <h3>One-liner</h3>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash · Linux / macOS (x64 &amp; arm64)</span><button class="copy-btn" data-copy="curl -fsSL https://raw.githubusercontent.com/JoasASantos/NeuroSploit/main/setup.sh | bash">copy</button></div>
+        <pre><code><span class="tok-cmd">curl</span> <span class="tok-flag">-fsSL</span> https://raw.githubusercontent.com/JoasASantos/NeuroSploit/main/setup.sh | <span class="tok-cmd">bash</span></code></pre>
+      </div>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">powershell · Windows (x64 &amp; arm64)</span><button class="copy-btn" data-copy="irm https://raw.githubusercontent.com/JoasASantos/NeuroSploit/main/install.ps1 | iex">copy</button></div>
+        <pre><code><span class="tok-cmd">irm</span> https://raw.githubusercontent.com/JoasASantos/NeuroSploit/main/install.ps1 | <span class="tok-cmd">iex</span></code></pre>
+      </div>
+      <p>The installer detects your OS/arch, installs the Rust toolchain if needed, clones the repo, builds the release binary and puts <code>neurosploit</code> on your PATH. Re-run it any time to update. Env knobs: <code>NEUROSPLOIT_REF</code> (branch/tag), <code>NEUROSPLOIT_DIR</code>, <code>PREFIX</code>.</p>
+
+      <h3>Manual build</h3>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="git clone https://github.com/JoasASantos/NeuroSploit && cd NeuroSploit/neurosploit-rs && cargo build --release">copy</button></div>
+        <pre><code><span class="tok-cmd">git</span> clone https://github.com/JoasASantos/NeuroSploit
+<span class="tok-cmd">cd</span> NeuroSploit/neurosploit-rs
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">--release</span>        <span class="tok-comment"># → target/release/neurosploit</span></code></pre>
+      </div>
+
+      <h3>Recommended runtime</h3>
+      <p>Run inside <strong>Kali Linux</strong> (or the Docker image) so the offensive tools the agents use are already present:</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="docker run -it --rm kalilinux/kali-rolling">copy</button></div>
+        <pre><code><span class="tok-cmd">docker</span> run <span class="tok-flag">-it --rm</span> kalilinux/kali-rolling
+<span class="tok-cmd">apt</span> update &amp;&amp; <span class="tok-cmd">apt</span> install <span class="tok-flag">-y</span> curl nmap ffuf nodejs npm
+<span class="tok-comment"># optional: cargo install rustscan ; cargo install typst-cli</span></code></pre>
+      </div>
+      <div class="callout tip">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zM9 21h6M10 17v4M14 17v4"/></svg>
+        <p>Agents <strong>degrade gracefully</strong>: if <code>rustscan</code> is absent they use <code>nmap</code>; if neither, <code>curl</code>. With Playwright MCP present they drive a real browser; otherwise <code>curl</code>.</p>
+      </div>
+
+      <h3>Verify</h3>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="neurosploit --version">copy</button></div>
+        <pre><code><span class="tok-cmd">neurosploit</span> <span class="tok-flag">--version</span>          <span class="tok-comment"># neurosploit 4.3.1</span>
+<span class="tok-cmd">neurosploit</span> agents             <span class="tok-comment"># {"vulns":255,...,"ai":30,...,"total":480}</span>
+<span class="tok-cmd">neurosploit</span> models             <span class="tok-comment"># all providers &amp; models</span></code></pre>
+      </div>
+    </section>
+
+    <!-- AUTH -->
+    <section id="auth">
+      <h2 class="anchor-h">Authentication: API key vs subscription <a class="hash" href="#auth">#</a></h2>
+      <p>You pick <strong>per run</strong> — the two paths are independent.</p>
+
+      <h3>A) Via API key</h3>
+      <p>Export the key for each provider you'll use, then run <strong>without</strong> <code>--subscription</code>:</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash · provider keys</span><button class="copy-btn" data-copy="export ANTHROPIC_API_KEY=sk-ant-...">copy</button></div>
+<pre><code><span class="tok-cmd">export</span> ANTHROPIC_API_KEY=sk-ant-...      <span class="tok-comment"># anthropic:claude-*</span>
+<span class="tok-cmd">export</span> OPENAI_API_KEY=sk-...             <span class="tok-comment"># openai:gpt-*</span>
+<span class="tok-cmd">export</span> GEMINI_API_KEY=AIza...            <span class="tok-comment"># gemini:gemini-*</span>
+<span class="tok-cmd">export</span> XAI_API_KEY=xai-...               <span class="tok-comment"># xai:grok-*</span>
+<span class="tok-comment"># … deepseek, mistral, qwen, groq, together, moonshot, openrouter, nvidia_nim</span>
+<span class="tok-comment"># ollama: no key (local) · LiteLLM proxy via LITELLM_BASE_URL + LITELLM_API_KEY</span>
+
+<span class="tok-cmd">neurosploit</span> run http://testphp.vulnweb.com/ <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">--vote-n</span> 3 <span class="tok-flag">-v</span></code></pre>
+      </div>
+      <p>Or put them in a <code>.env</code> and source it (<code>cp .env.example .env</code>; edit; <code>set -a; . ./.env; set +a</code>). In the REPL you can also run <code>/key anthropic sk-ant-...</code>.</p>
+
+      <h3>B) Via subscription (no API key)</h3>
+      <p>Install and log into a local agentic CLI, then pass <code>--subscription</code>:</p>
+      <table class="doc-table">
+        <thead><tr><th>--model prefix</th><th>CLI</th><th>Login</th></tr></thead>
+        <tbody>
+          <tr><td><code>anthropic:</code></td><td>Claude Code (<code>claude</code>)</td><td><code>claude</code> → <code>/login</code></td></tr>
+          <tr><td><code>openai:</code></td><td>Codex (<code>codex</code>)</td><td><code>codex login</code></td></tr>
+          <tr><td><code>gemini:</code></td><td>Gemini (<code>gemini</code>)</td><td><code>gemini login</code></td></tr>
+          <tr><td><code>xai:</code></td><td>Grok (<code>grok</code>) — incl. <code>xai:grok-4.7</code></td><td><code>grok login</code></td></tr>
+        </tbody>
+      </table>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="neurosploit run http://testphp.vulnweb.com/ --subscription --model anthropic:claude-opus-4-8 --mcp -v">copy</button></div>
+        <pre><code><span class="tok-cmd">neurosploit</span> run http://testphp.vulnweb.com/ <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">--mcp</span> <span class="tok-flag">-v</span></code></pre>
+      </div>
+      <div class="callout note">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p><strong>Per-project state</strong> lives in <code>&lt;cwd&gt;/.neurosploit/</code> (session, run history, command history) and each engagement's output in <code>runs/ns-&lt;ts&gt;-&lt;target&gt;/</code>. No database required. Run from the directory you want to keep that state in.</p>
+      </div>
+    </section>
+
+    <!-- MODELS -->
+    <section id="models">
+      <h2 class="anchor-h">Choosing models <a class="hash" href="#models">#</a></h2>
+      <p><code>--model provider:model</code> is <strong>repeatable</strong>. The <strong>first</strong> model is the primary (does recon &amp; exploitation); the <strong>rest fail over</strong> if it errors <strong>and</strong> form the <strong>validator voting jury</strong> — a different model adjudicates each finding, which means fewer false positives.</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="--model anthropic:claude-opus-4-8 --model openai:gpt-5.5 --model gemini:gemini-3-pro">copy</button></div>
+<pre><code><span class="tok-comment"># single model</span>
+<span class="tok-flag">--model</span> anthropic:claude-opus-4-8
+
+<span class="tok-comment"># voting panel (Opus finds, GPT-5.5 + Gemini-3 adjudicate)</span>
+<span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">--model</span> openai:gpt-5.5 <span class="tok-flag">--model</span> gemini:gemini-3-pro</code></pre>
+      </div>
+      <p>A built-in <strong>router</strong> sends fast/cheap models to recon &amp; triage and the strongest to exploitation, to save tokens. See <code>neurosploit models</code> for the full list (Claude 5 / 4.x, GPT-5.x incl. Codex, Gemini 3 / 2.5, Grok, NVIDIA NIM, DeepSeek, Mistral, Qwen, Groq, Together, Moonshot / Kimi K3, OpenRouter, Ollama).</p>
+    </section>
+
+    <!-- BLACKBOX -->
+    <section id="blackbox">
+      <h2 class="anchor-h">Black-box (URL) <a class="hash" href="#blackbox">#</a></h2>
+      <p>Recon → select → exploit → vote → report, against a live URL.</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy='neurosploit run http://testphp.vulnweb.com/ --subscription --model anthropic:claude-opus-4-8 --focus "injection and broken access control" --mcp -v'>copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> run http://testphp.vulnweb.com/ \
+  <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 \
+  <span class="tok-flag">--focus</span> <span class="tok-str">"injection and broken access control"</span> <span class="tok-flag">--mcp</span> <span class="tok-flag">-v</span></code></pre>
+      </div>
+    </section>
+
+    <!-- WHITEBOX -->
+    <section id="whitebox">
+      <h2 class="anchor-h">White-box (source repo) <a class="hash" href="#whitebox">#</a></h2>
+      <p>Reviews a <strong>local code repository</strong> with the 78 source-review (SAST) agents: SQLi, command injection, SSRF, XSS, path traversal, insecure deserialization, hardcoded secrets, weak crypto, auth/IDOR, XXE, SSTI, and language-specific sinks (PHP / Java / .NET / Go / Node / Python).</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="neurosploit whitebox /tmp/DVWA --subscription --model anthropic:claude-opus-4-8 -v">copy</button></div>
+<pre><code><span class="tok-comment"># clone or point at the code you own</span>
+<span class="tok-cmd">git</span> clone https://github.com/digininja/DVWA /tmp/DVWA
+
+<span class="tok-comment"># review it (subscription or --model with an API key)</span>
+<span class="tok-cmd">neurosploit</span> whitebox /tmp/DVWA <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">-v</span>
+
+<span class="tok-comment"># focus a class, cap agents, raise the voting bar</span>
+<span class="tok-cmd">neurosploit</span> whitebox /tmp/DVWA <span class="tok-flag">--focus</span> <span class="tok-str">"injection and access control"</span> \
+  <span class="tok-flag">--max-agents</span> 8 <span class="tok-flag">--vote-n</span> 2 <span class="tok-flag">--model</span> openai:gpt-5.5</code></pre>
+      </div>
+      <h4>How it works</h4>
+      <ol class="steps">
+        <li><strong>Collects source context</strong> — walks the repo (skips <code>.git/node_modules/target/vendor</code>), reads supported source files into a bounded review context.</li>
+        <li><strong>Selects code agents</strong> for the languages / frameworks it sees.</li>
+        <li>Each agent traces <strong>source → sink</strong> dataflow and must quote the exact vulnerable lines as <code>file:line</code>.</li>
+        <li><strong>Grounding is symbolic</strong>: a finding is only kept if its <code>file:line</code> / quoted code actually exists in the reviewed source — no hallucinated locations.</li>
+        <li><strong>Validated</strong> by cross-model voting, then reported with the code reference, CWE/OWASP, PoC and remediation.</li>
+      </ol>
+      <div class="callout tip">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+        <p>No <code>--mcp</code> in white-box (there's no live app). For huge repos, narrow with <code>--focus</code> or point at a subdirectory. Each finding's <code>endpoint</code> is the <code>file:line</code>; <code>evidence</code> quotes the code.</p>
+      </div>
+    </section>
+
+    <!-- GREYBOX -->
+    <section id="greybox">
+      <h2 class="anchor-h">Grey-box (code + live app) <a class="hash" href="#greybox">#</a></h2>
+      <p>The strongest mode: review the <strong>source</strong> <em>and</em> exploit the <strong>running app</strong> together. Code-review findings become <strong>leads</strong> that the live agents confirm against the deployed application — so a SQLi spotted in code is proven exploitable on the running endpoint.</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy='neurosploit greybox /tmp/DVWA --url http://localhost:8080/ --creds creds.yaml --focus "auth and IDOR" --subscription --model anthropic:claude-opus-4-8 --mcp -v'>copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> greybox /tmp/DVWA <span class="tok-flag">--url</span> http://localhost:8080/ \
+  <span class="tok-flag">--creds</span> creds.yaml <span class="tok-flag">--focus</span> <span class="tok-str">"auth and IDOR"</span> \
+  <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">--mcp</span> <span class="tok-flag">-v</span></code></pre>
+      </div>
+      <ol class="steps">
+        <li><strong>Recon</strong> the live app (<code>--url</code>).</li>
+        <li><strong>Review the source</strong> → produces a list of <em>leads</em> (suspected vulns with file:line).</li>
+        <li><strong>Live exploitation</strong> runs with those leads injected as context — agents go straight for the proven-in-code weaknesses and prove them on the live app (empirical receipt).</li>
+        <li>Validate (cross-model) → chain → report.</li>
+      </ol>
+      <div class="callout note">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p>Pass <code>--creds creds.yaml</code> so agents test <strong>authenticated</strong> flows (essential for IDOR/BOLA/auth). In the REPL, set <strong>both</strong> <code>/repo &lt;path&gt;</code> and <code>/target &lt;url&gt;</code> → grey-box is auto-selected.</p>
+      </div>
+    </section>
+
+    <!-- HOST -->
+    <section id="host">
+      <h2 class="anchor-h">Host / Infra (Linux / Windows / AD) <a class="hash" href="#host">#</a></h2>
+      <p>Target an IP/host with SSH or Windows/AD credentials from <code>creds.yaml</code>:</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy='neurosploit host 10.0.0.10 --creds creds.yaml --focus "privilege escalation and AD" --subscription --model anthropic:claude-opus-4-8 -v'>copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> host 10.0.0.10 <span class="tok-flag">--creds</span> creds.yaml \
+  <span class="tok-flag">--focus</span> <span class="tok-str">"privilege escalation and AD"</span> <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">-v</span></code></pre>
+      </div>
+      <p>Runs infra agents: port/service scan, SMB enum, Linux privesc (sudo / cron / SSH), Windows privesc (SMB-signing / WinRM), and AD kerberoasting / AS-REP / ACL abuse / DCSync / default-creds.</p>
+    </section>
+
+    <!-- AI -->
+    <section id="ai">
+      <h2 class="anchor-h">AI / LLM red-teaming <a class="hash" href="#ai">#</a></h2>
+      <p>Point NeuroSploit at a <strong>live AI system</strong> — an LLM chat/API endpoint, an AI agent, or an MCP server — and it red-teams it: <strong>jailbreaks</strong> and <strong>prompt injection</strong> across many scenarios, plus the full OWASP LLM Top 10 (2025), MCP threats and OWASP AI Exchange.</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy='neurosploit aitest https://your-ai-app.example/api/chat --auth "Authorization: Bearer <key>" --focus "jailbreaks and indirect prompt injection" --subscription --model anthropic:claude-opus-4-8 -v'>copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> aitest https://your-ai-app.example/api/chat \
+  <span class="tok-flag">--auth</span> <span class="tok-str">"Authorization: Bearer &lt;key&gt;"</span> \
+  <span class="tok-flag">--focus</span> <span class="tok-str">"jailbreaks and indirect prompt injection"</span> \
+  <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">-v</span></code></pre>
+      </div>
+      <p>It runs an attacker→judge loop per technique: capture the <strong>baseline refusal</strong>, apply the technique across several <strong>scenarios/variants</strong>, then use an <strong>LLM-judge</strong> criterion to confirm whether the guardrail was actually bypassed — proving it with a <strong>benign, redacted</strong> prompt+response receipt (never real harm).</p>
+      <h4>Jailbreak technique agents</h4>
+      <p><code>AdvPrefix</code> (adversarial prefix/suffix), <code>PAIR</code> (automated iterative refinement), <code>TAP</code> (tree-of-attacks), <code>Crescendo</code> (multi-turn escalation), many-shot, persona/DAN roleplay, encoding/obfuscation (base64 / ROT13 / zero-width / low-resource-language), and refusal-suppression.</p>
+      <h4>Prompt-injection &amp; hijacking scenarios</h4>
+      <p>Direct injection, <strong>indirect</strong> injection via RAG doc / web page / email / tool output, <strong>goal hijacking</strong>, agentic <strong>tool/function-call abuse</strong>, and <strong>system-prompt / secret exfiltration</strong>.</p>
+      <div class="callout tip">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+        <p>To audit <strong>Skill/plugin or n8n</strong> definition files white-box instead of a live endpoint, use <code>neurosploit skills &lt;file|folder&gt;</code>. All AI testing is authorized and non-destructive — demonstrations stay benign and redacted.</p>
+      </div>
+    </section>
+
+    <!-- MOBILE -->
+    <section id="mobile">
+      <h2 class="anchor-h">Mobile / binary testing <a class="hash" href="#mobile">#</a></h2>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="neurosploit mobile app.apk --subscription --model anthropic:claude-opus-4-8 -v">copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> mobile &lt;app.apk | app.ipa | binary&gt; <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">-v</span></code></pre>
+      </div>
+      <p>Analyses a <strong>local</strong> artifact with the <code>mobile</code> agent set — 12 reverse-engineering skills: static triage, APK/IPA analysis, RASP/anti-tamper mapping, root/jailbreak, TLS pinning, anti-debug, deobfuscation, integrity checks, secret extraction, insecure storage and traffic analysis. Every tool runs <strong>headless</strong> (Ghidra <code>analyzeHeadless</code>, MobSF, Frida, apktool, jadx, radare2). Best run with <code>--sandbox</code> (Kali container) so the heavy toolchain installs off your host.</p>
+    </section>
+
+    <!-- CONTAINER -->
+    <section id="container">
+      <h2 class="anchor-h">Container <a class="hash" href="#container">#</a></h2>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="neurosploit container <image:tag>">copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> container &lt;image:tag&gt;     <span class="tok-comment"># OCI image scan + SBOM (trivy / grype / syft)</span></code></pre>
+      </div>
+    </section>
+
+    <!-- REPL -->
+    <section id="repl">
+      <h2 class="anchor-h">The interactive REPL <a class="hash" href="#repl">#</a></h2>
+      <p>Run with <strong>no arguments</strong> for a persistent session. A context bar shows <code>model auth · cwd · mode▸target</code>.</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">neurosploit› key commands</span></div>
+<pre><code><span class="tok-key">/model</span> [a:b,..]     set models (no arg → arrow-key multi-select)
+<span class="tok-key">/key</span> [prov key]     configure API keys for your models
+<span class="tok-key">/sub</span> on|off        use subscription login instead of API key
+<span class="tok-key">/target</span> &lt;url&gt;      black-box target     <span class="tok-key">/repo</span> &lt;path&gt;  add a repo (repo+target = greybox)
+<span class="tok-key">/auth</span> &lt;value&gt;      send an auth header   <span class="tok-key">/creds</span> &lt;file&gt;  load creds.yaml
+<span class="tok-key">/focus</span> &lt;text&gt;      steer the tests (or just type the instruction)
+<span class="tok-key">/class</span> &lt;a,b,..&gt;    focus on vuln CLASSES (idor,sqli,xss,ssrf,…)
+<span class="tok-key">/only</span> &lt;agents&gt;     run EXACTLY these named agents (skips recon selection)
+<span class="tok-key">@path @dir @f:1-20</span>  attach a file/folder/line-range to context (Tab → menu)
+<span class="tok-key">/mcp</span> on|off   <span class="tok-key">/votes</span> &lt;n&gt;   <span class="tok-key">/agents</span> &lt;n&gt;   <span class="tok-key">/recon</span> &lt;1-4&gt;   <span class="tok-key">/chain</span> &lt;n&gt;
+<span class="tok-key">/quick</span>              economy preset (1 voter · light recon · ≤6 agents)
+<span class="tok-key">/compliance</span> &lt;f,…&gt;   map onto pci-dss, hipaa, soc2, gdpr
+<span class="tok-key">/run</span>                launch the engagement (non-blocking)
+<span class="tok-key">/status</span>  <span class="tok-key">/stop</span>  <span class="tok-key">/results</span> [n]  <span class="tok-key">/report</span> [n]  <span class="tok-key">/diff</span>  <span class="tok-key">/retest</span> [n]  <span class="tok-key">/quit</span></code></pre>
+      </div>
+      <div class="callout tip">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg>
+        <p><strong>Any language.</strong> You don't have to use slash-commands — describe the engagement in plain text, in any language: <em>"test https://shop.com with opus, focus on SQLi, out of scope /admin, run"</em>. Output and help are English; your input can be Portuguese, Spanish, etc.</p>
+      </div>
+
+      <h3>Runs are non-blocking</h3>
+      <p><code>/run</code> launches the engagement <strong>in the background</strong> and returns the prompt immediately — you keep typing while it streams above. <code>/status</code> shows a live phase and progress bar; <code>/stop</code> gives a 3-way choice (validate-then-report · raw report now · discard).</p>
+      <div class="callout note">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p><strong>Findings survive a crash/quit</strong> — every finding is checkpointed live to <code>.neurosploit/active_run.json</code> and recovered on the next launch. <strong>If tokens/quota run out the run pauses</strong> (keeping state); wait and <code>/continue</code>, or switch model with <code>/model</code> then <code>/continue</code>.</p>
+      </div>
+    </section>
+
+    <!-- SCOPE -->
+    <section id="scope">
+      <h2 class="anchor-h">Scope &amp; authorization <a class="hash" href="#scope">#</a></h2>
+      <p>Hard scope is the <strong>safety boundary</strong>: a request whose host isn't authorized is <em>refused before it leaves</em>. Declaring scope is frictionless, and <strong>no bug-bounty program or capability token is required</strong> for a normal client engagement with written authorization.</p>
+      <h4>1. Just point at the target</h4>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">neurosploit›</span></div><pre><code><span class="tok-key">/target</span> app.client.com        <span class="tok-comment"># authorized against app.client.com</span>
+<span class="tok-key">/target</span> *.client.com          <span class="tok-comment"># apex + ALL subdomains (recon enumerates them)</span>
+<span class="tok-key">/run</span></code></pre></div>
+      <h4>2. Declare the whole scope in one line</h4>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">neurosploit›</span></div><pre><code><span class="tok-key">/authorize</span> app.client.com *.client.com 10.0.0.0/24 https://api.client.com/v2
+<span class="tok-key">/run</span></code></pre></div>
+      <p>Tune limits any time with <code>/guardrail</code> (e.g. <code>/guardrail destructive on</code>, <code>/guardrail rate 60</code>, <code>/guardrail accounts 2</code>), exclude with <code>/scope-out</code>.</p>
+      <h4>3. Import a ready config file</h4>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">engagement.example.yaml</span><button class="copy-btn" data-copy="neurosploit run '*.client.com' --scope-file examples/scopes/engagement.example.yaml --subscription">copy</button></div>
+<pre><code><span class="tok-comment"># scope (the safety boundary — the one thing you must set)</span>
+<span class="tok-key">hard:</span>
+  - <span class="tok-str">"*.client.com"</span>            <span class="tok-comment"># apex + every subdomain</span>
+  - 10.0.0.0/24               <span class="tok-comment"># an internal range</span>
+<span class="tok-key">exclude:</span>
+  - billing.client.com        <span class="tok-comment"># carve-outs always beat the allowlist</span>
+<span class="tok-key">soft:</span>
+  <span class="tok-key">allow_destructive_methods:</span> <span class="tok-num">false</span>
+  <span class="tok-key">allow_account_creation:</span> <span class="tok-num">true</span>
+  <span class="tok-key">max_accounts:</span> <span class="tok-num">3</span>
+  <span class="tok-key">max_requests_per_minute:</span> <span class="tok-num">240</span>
+  <span class="tok-key">forbidden_payloads:</span> [<span class="tok-str">"drop table"</span>, <span class="tok-str">"rm -rf /"</span>, <span class="tok-str">"shutdown"</span>]
+
+<span class="tok-comment"># optional — define the rest of the engagement in the same file:</span>
+<span class="tok-key">target:</span> <span class="tok-str">"*.client.com"</span>
+<span class="tok-key">models:</span>
+  - anthropic:claude-opus-5-5
+<span class="tok-key">classes:</span> idor, sqli, ssrf
+<span class="tok-key">focus:</span> <span class="tok-str">"prioritize access control and SSRF"</span>
+<span class="tok-key">authorization:</span> <span class="tok-str">"&lt;SOW / contract reference, or a program URL&gt;"</span></code></pre>
+      </div>
+    </section>
+
+    <!-- POTENT -->
+    <section id="potent">
+      <h2 class="anchor-h">The potent run recipe <a class="hash" href="#potent">#</a></h2>
+      <p>A black-box run against a real, hardened target (behind a WAF/CDN) is only as good as how you set it up. This is the recipe that gives the strongest, most-reproducible results — paste it into the REPL before <code>/run</code>:</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">neurosploit› recommended setup</span></div>
+<pre><code><span class="tok-comment"># 1) A cross-model jury — the finder AND independent validators</span>
+<span class="tok-key">/model</span> anthropic:claude-opus-5-5, openai:gpt-6-astra
+
+<span class="tok-comment"># 2) A realistic browser User-Agent — a scanner UA gets WAF-blocked (false negatives)</span>
+<span class="tok-key">/ua</span> browser
+
+<span class="tok-comment"># 3) Deep recon — more rounds, active enum, subdomain discovery (1 quick…4 exhaustive)</span>
+<span class="tok-key">/recon</span> 4
+
+<span class="tok-comment"># 4) Scope + authorization in one step</span>
+<span class="tok-key">/scope-file</span> examples/scopes/engagement.example.yaml
+<span class="tok-key">/authorization</span> https://hackerone.com/&lt;program&gt;     <span class="tok-comment"># context only, never widens scope</span>
+
+<span class="tok-comment"># 5) Point the hunt — in ANY language</span>
+focus on auth, OAuth/OIDC, IDOR/BOLA and business logic on less-hardened subdomains
+
+<span class="tok-comment"># 6) Go — runs in the background; watch with /status, /logs, /finding</span>
+<span class="tok-key">/run</span></code></pre>
+      </div>
+      <table class="doc-table">
+        <thead><tr><th>Command</th><th>When to use</th></tr></thead>
+        <tbody>
+          <tr><td><code>/class idor,sqli,ssrf,auth</code></td><td>Force a run onto specific vuln classes (pins matching agents).</td></tr>
+          <tr><td><code>/chain 3</code></td><td>More post-exploitation chaining rounds (pivot a foothold into deeper impact).</td></tr>
+          <tr><td><code>/votes 2</code></td><td>Require 2 models to agree before a finding is confirmed (needs ≥2 models).</td></tr>
+          <tr><td><code>/proxy …:8080</code></td><td>Route all traffic through Burp/ZAP to inspect &amp; replay.</td></tr>
+          <tr><td><code>/creds creds.yaml</code></td><td>Authenticated testing — where the high-impact bugs live.</td></tr>
+          <tr><td><code>/quick</code></td><td>The opposite — a fast, cheap, low-token pass.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout note">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p><strong>Reality check.</strong> A mature external surface (behind Cloudflare) mostly yields hygiene/info-disclosure findings on black-box — that's hardening, not a tool failure. High/critical bugs live on the <strong>authenticated</strong> surface and <strong>less-hardened subdomains</strong>. For a measurable benchmark, run against a seeded lab (OWASP Juice Shop, crAPI, VAmPI).</p>
+      </div>
+    </section>
+
+    <!-- CREDS -->
+    <section id="creds">
+      <h2 class="anchor-h">Credentials (creds.yaml) <a class="hash" href="#creds">#</a></h2>
+      <p>One file covers web auth, <strong>multiple roles</strong> (for access-control testing), SSH, Windows/AD and <strong>cloud</strong> (AWS/GCP/Azure). Mix only the blocks you need.</p>
+      <h4>Web auth (single identity)</h4>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">creds.yaml</span></div>
+<pre><code><span class="tok-comment"># --- pick one ---</span>
+<span class="tok-key">jwt:</span> eyJhbGciOi...                 <span class="tok-comment"># → Authorization: Bearer &lt;jwt&gt;</span>
+<span class="tok-comment"># header: "X-Api-Key: abc123"      # any raw header, sent as-is</span>
+<span class="tok-comment"># cookie: "session=deadbeef"       # → Cookie: session=deadbeef</span>
+
+<span class="tok-comment"># --- OR an automated login the harness performs (real HTTP) ---</span>
+<span class="tok-key">login:</span>
+  <span class="tok-key">url:</span> http://localhost:8080/login
+  <span class="tok-key">method:</span> POST
+  <span class="tok-key">username_field:</span> username
+  <span class="tok-key">password_field:</span> password
+  <span class="tok-key">username:</span> admin
+  <span class="tok-key">password:</span> password
+  <span class="tok-key">success:</span> Logout                  <span class="tok-comment"># text shown on a successful login</span></code></pre>
+      </div>
+      <h4>Multiple identities — access control (IDOR / BOLA / BFLA / privesc)</h4>
+      <p>Define two or more <strong>named roles</strong>. With ≥2 roles the harness authenticates as each and tests <strong>cross-role</strong> access, proving each with the authorized-vs-unauthorized request pair. Per role: <code>jwt</code> · <code>header</code> · <code>cookie</code> · <code>apikey</code> · or <code>login</code>+<code>username</code>+<code>password</code>.</p>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">creds.yaml · roles</span></div>
+<pre><code><span class="tok-key">admin:</span>
+  <span class="tok-key">jwt:</span> eyJhbGciOi...
+<span class="tok-key">user:</span>
+  <span class="tok-key">apikey:</span> abc123                   <span class="tok-comment"># → X-Api-Key: abc123</span>
+<span class="tok-key">victim:</span>
+  <span class="tok-key">cookie:</span> <span class="tok-str">"session=deadbeef"</span>
+<span class="tok-key">tester:</span>                            <span class="tok-comment"># a role can log in itself instead</span>
+  <span class="tok-key">login:</span> https://app.example/api/login
+  <span class="tok-key">username:</span> tester
+  <span class="tok-key">password:</span> Passw0rd!</code></pre>
+      </div>
+      <h4>Linux host (SSH), Windows/AD &amp; cloud</h4>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">creds.yaml · infra + cloud</span></div>
+<pre><code><span class="tok-key">ssh:</span>
+  <span class="tok-key">host:</span> 10.0.0.5
+  <span class="tok-key">user:</span> ubuntu
+  <span class="tok-key">password:</span> s3cret                 <span class="tok-comment"># or: key: /home/op/id_ed25519</span>
+<span class="tok-key">windows:</span>
+  <span class="tok-key">host:</span> 10.0.0.10
+  <span class="tok-key">domain:</span> CORP
+  <span class="tok-key">user:</span> jdoe
+  <span class="tok-key">password:</span> Winter2026!            <span class="tok-comment"># or hash: &lt;LM:NT&gt; for pass-the-hash</span>
+<span class="tok-key">aws:</span>
+  <span class="tok-key">access_key_id:</span> AKIA...
+  <span class="tok-key">secret_access_key:</span> ...
+  <span class="tok-key">region:</span> us-east-1
+<span class="tok-key">gcp:</span>
+  <span class="tok-key">service_account_json:</span> /path/to/sa.json
+  <span class="tok-key">project:</span> my-project-id
+<span class="tok-key">azure:</span>
+  <span class="tok-key">tenant_id:</span> ...
+  <span class="tok-key">client_id:</span> ...
+  <span class="tok-key">client_secret:</span> ...
+  <span class="tok-key">subscription_id:</span> ...</code></pre>
+      </div>
+      <div class="callout tip">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <p><strong>Secrets stay in your file.</strong> Nothing is written elsewhere (inline GCP JSON is copied to a temp file only for the SDK). Use with <code>--creds creds.yaml</code> or <code>/creds creds.yaml</code> in the REPL.</p>
+      </div>
+    </section>
+
+    <!-- ACCOUNTS -->
+    <section id="accounts">
+      <h2 class="anchor-h">Test accounts &amp; the credential vault <a class="hash" href="#accounts">#</a></h2>
+      <p>To reach the high-impact <strong>authenticated</strong> surface, NeuroSploit can analyze the app's forms and <strong>create its own test account</strong> when you don't supply credentials — with curl (plain HTML/API forms) or the Playwright browser (JS-rendered / multi-step forms).</p>
+      <ul>
+        <li><strong>Anti-flood guardrail (hard):</strong> at most <strong>2 accounts per engagement</strong>. Agents never loop / script / batch the register endpoint; they reuse the account they made.</li>
+        <li><strong>Credential vault:</strong> every account/credential is written to <code>.neurosploit/vault/&lt;run-id&gt;.json</code>; secrets are masked in the report and live only in the vault.</li>
+        <li><strong>Cleanup list:</strong> the report includes an Info finding <strong>"Test accounts created (DELETE after)"</strong> listing each account and how it was created.</li>
+        <li><strong>Finding labels:</strong> every finding is tagged <code>Auth: authenticated</code> / <code>unauthenticated</code> and <code>Account:</code> (which test user proved it).</li>
+        <li><strong>Disposable email (opt-in):</strong> <code>/tempmail on</code> enables the free mail.tm API to read a registration confirmation code. Off by default.</li>
+      </ul>
+    </section>
+
+    <!-- TUI -->
+    <section id="tui">
+      <h2 class="anchor-h">Mission Control TUI <a class="hash" href="#tui">#</a></h2>
+      <p>A live dashboard with concurrent panels and a composer you can type into <strong>while the run streams</strong>:</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="neurosploit tui http://testphp.vulnweb.com/ --subscription --model anthropic:claude-opus-4-8 --mcp">copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> tui http://testphp.vulnweb.com/ <span class="tok-flag">--subscription</span> <span class="tok-flag">--model</span> anthropic:claude-opus-4-8 <span class="tok-flag">--mcp</span>
+<span class="tok-comment"># greybox: add --repo /path/to/repo</span></code></pre>
+      </div>
+      <ul>
+        <li><strong>Header:</strong> target · mode · model · phase · elapsed · 🪙 tokens/cost · findings</li>
+        <li><strong>Activity feed</strong> (color-coded), <strong>Findings</strong> panel (live), <strong>Targets</strong> map</li>
+        <li><strong>Composer</strong> (non-blocking): <code>summary</code>, <code>pause</code>, <code>errors</code>, <code>clear</code>, or a free-text note</li>
+        <li><strong>Esc / Ctrl-C</strong> → graceful stop; the report is generated on exit</li>
+      </ul>
+    </section>
+
+    <!-- WEB CONSOLE -->
+    <section id="web-console">
+      <h2 class="anchor-h">Web console <a class="hash" href="#web-console">#</a></h2>
+      <p>A browser UI for the same harness — one <code>node</code> process serves the SPA and drives the compiled <code>neurosploit</code> binary; nothing about the harness logic is reimplemented in the browser. Zero npm dependencies (Node ≥18 built-ins only).</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="cd neurosploit-rs && cargo build --release && cd ../web && npm start">copy</button></div>
+<pre><code><span class="tok-cmd">cd</span> neurosploit-rs &amp;&amp; <span class="tok-cmd">cargo</span> build <span class="tok-flag">--release</span>   <span class="tok-comment"># build the binary once</span>
+<span class="tok-cmd">cd</span> ../web &amp;&amp; <span class="tok-cmd">npm</span> start                        <span class="tok-comment"># → http://localhost:4173</span></code></pre>
+      </div>
+      <h4>The 5-step wizard</h4>
+      <ol class="steps">
+        <li><strong>Asset</strong> — pick black/white/grey-box, host/infra, or AI/LLM, then the target URL or repo path.</li>
+        <li><strong>Scope &amp; Auth</strong> — objective, focus, out-of-scope, named roles for IDOR/BOLA, per-provider API keys (kept in the server process's memory only, never written to disk).</li>
+        <li><strong>Leads</strong> — the 486-agent board, auto-categorized. Toggle a lead, a category, or Select/Clear all. Leave everything off to let recon-driven selection choose. <strong>+ Custom lead</strong> generates a real specialist-agent markdown file.</li>
+        <li><strong>Model &amp; Run</strong> — provider/model picker, API-key vs. subscription toggle, votes / chain-depth / recon intensity.</li>
+        <li><strong>Review</strong> — confirm the plan, then <strong>Start Exploitation</strong>.</li>
+      </ol>
+      <p>Tabs (live &amp; finished-run): <strong>Findings</strong>, <strong>Attack graph</strong> (host → service → finding → credential → impact), <strong>Chains</strong>, <strong>Dependencies</strong>, <strong>Traffic</strong>, <strong>Traces</strong> (transcript viewer), <strong>Deliverables</strong>. The finding modal shows <strong>Wire evidence</strong> — the real request/response pairs — and a <strong>⟳ Re-test this finding</strong> button that re-runs the proof through the replay engine.</p>
+    </section>
+
+    <!-- MCP -->
+    <section id="mcp">
+      <h2 class="anchor-h">NeuroSploit as an MCP server <a class="hash" href="#mcp">#</a></h2>
+      <p>Run NeuroSploit as a Model Context Protocol server and any MCP client (Claude Code, Codex, Cursor…) can drive it as tools.</p>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="claude mcp add neurosploit -- neurosploit mcp">copy</button></div>
+<pre><code><span class="tok-cmd">neurosploit</span> mcp                           <span class="tok-comment"># speaks MCP over stdio</span>
+<span class="tok-cmd">claude</span> mcp add neurosploit -- neurosploit mcp   <span class="tok-comment"># install in Claude Code</span></code></pre>
+      </div>
+      <p>Or add it by hand to <code>~/.claude.json</code> / a project <code>.mcp.json</code>:</p>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">json</span></div>
+<pre><code>{
+  <span class="tok-key">"mcpServers"</span>: {
+    <span class="tok-key">"neurosploit"</span>: { <span class="tok-key">"command"</span>: <span class="tok-str">"neurosploit"</span>, <span class="tok-key">"args"</span>: [<span class="tok-str">"mcp"</span>] }
+  }
+}</code></pre>
+      </div>
+      <table class="doc-table">
+        <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>neurosploit_run</code></td><td>Launch an engagement (target, mode, model, focus, scope-file, sandbox).</td></tr>
+          <tr><td><code>neurosploit_list_runs</code></td><td>List finished runs.</td></tr>
+          <tr><td><code>neurosploit_findings</code></td><td>Read a run's findings JSON.</td></tr>
+          <tr><td><code>neurosploit_report</code></td><td>Read a run's Markdown report.</td></tr>
+          <tr><td><code>neurosploit_rebuild</code></td><td>Rebuild a run's report (no model calls).</td></tr>
+          <tr><td><code>neurosploit_internal</code></td><td>Internal / AD attack-graph analysis.</td></tr>
+          <tr><td><code>neurosploit_compliance</code></td><td>Map a run onto PCI-DSS / HIPAA / SOC 2 / GDPR.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- GRAPH -->
+    <section id="graph">
+      <h2 class="anchor-h">Attack graph &amp; Neo4j (graph memory) <a class="hash" href="#graph">#</a></h2>
+      <p>The attack graph is <strong>part of the test</strong>, not a post-run drawing. A graph checkpoint runs after recon, at validation, at each chaining round, and at the end — in every mode. At each checkpoint it <strong>directs agent selection</strong> (an SSRF lead pulls in <code>ssrf_cloud</code>, PostgreSQL + SQLi pulls in <code>postgres_superuser_rce</code>…) and <strong>feeds every exploit prompt</strong> a live context: the surface, the top chains, the next moves, and the dependency todolist.</p>
+      <h4>It works without Neo4j</h4>
+      <p>Every run writes a <code>graph/</code> folder next to the report — no database needed:</p>
+      <table class="doc-table">
+        <thead><tr><th>File</th><th>What</th></tr></thead>
+        <tbody>
+          <tr><td><code>attack-chains.md</code></td><td>chains in analyst format, plus next moves</td></tr>
+          <tr><td><code>chains.json · todo.json</code></td><td>chains and the dependency todolist as JSON</td></tr>
+          <tr><td><code>graph.cypher</code></td><td>idempotent MERGE script (<code>cypher-shell -f</code>)</td></tr>
+          <tr><td><code>graph.json</code></td><td>nodes/edges as JSON</td></tr>
+          <tr><td><code>queries.cypher</code></td><td>ready-made analyst queries</td></tr>
+        </tbody>
+      </table>
+      <h4>Enabling Neo4j (optional)</h4>
+      <div class="codeblock">
+        <div class="cb-bar"><span class="lang">bash</span><button class="copy-btn" data-copy="neurosploit run https://app.example --neo4j bolt://localhost:7687">copy</button></div>
+<pre><code><span class="tok-comment"># credentials ONLY via env — never on the command line, never written to disk</span>
+<span class="tok-cmd">export</span> NEO4J_USER=neo4j NEO4J_PASSWORD=<span class="tok-str">'please-change-me'</span>
+<span class="tok-cmd">neurosploit</span> run https://app.example <span class="tok-flag">--neo4j</span> bolt://localhost:7687</code></pre>
+      </div>
+      <div class="callout note">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p><strong>Data minimisation.</strong> No raw secret, token, cookie, password, body or model narrative ever becomes a graph property — secrets are stored as salted fingerprints. Cross-run memory is scoped to the target.</p>
+      </div>
+    </section>
+
+    <!-- WIRE -->
+    <section id="wire">
+      <h2 class="anchor-h">Wire-bound evidence &amp; report redaction <a class="hash" href="#wire">#</a></h2>
+      <p>Two safeguards that are <strong>always on</strong> — no flag, part of the process.</p>
+      <h4>Wire-bound evidence</h4>
+      <p>Before validation, every exchange an agent reports is re-sent by the harness itself through the scope-guarded replay engine (non-mutating verbs only) and checked against recorded traffic. When the wire reproduces the agent's account, the harness's own observation replaces it and the deterministic validators judge <strong>real bytes</strong> (marked <code>[wire-verified]</code>). When the wire <strong>contradicts</strong> it, the finding can't stand as confirmed. What can't be checked stays <strong>unverifiable</strong>.</p>
+      <h4>Report redaction</h4>
+      <p>Credentials become <code>$SECRET_n</code> placeholders in every human-facing report — the same secret gets the same placeholder throughout, so an attack chain stays readable. Raw values are kept only in <code>findings.json</code> and the run's <code>vault.json</code>.</p>
+    </section>
+
+    <!-- DECIDE -->
+    <section id="decide">
+      <h2 class="anchor-h">How it decides <a class="hash" href="#decide">#</a></h2>
+      <p>NeuroSploit treats the target as <strong>partially observable</strong> (a POMDP):</p>
+      <ul>
+        <li><strong>Belief world model</strong> — a property graph whose nodes (host/service/vuln/exploit/credential) carry <em>probabilities</em>, updated by observations.</li>
+        <li><strong>Value-of-information</strong> — "scan more vs exploit now" falls out of belief entropy: when a node's belief is diffuse, recon is worth more than exploiting.</li>
+        <li><strong>Anti-hallucination gate</strong> (<code>may_assert</code>) — the agent may <strong>not</strong> claim exploitability while the belief is diffuse; it must observe more first.</li>
+        <li><strong>Grounding</strong> — no claim without a receipt: <em>empirical</em> for black-box / host / AI, <em>symbolic</em> (<code>file:line</code>) for white-box SAST, and <em>either</em> for grey-box.</li>
+        <li><strong>Chaining</strong> — confirmed findings are chained into deeper impact, each stage proven before advancing.</li>
+      </ul>
+      <p>White-box collapses the POMDP toward a near-deterministic MDP (the world model is built from SAST/dataflow), so uncertainty becomes <em>path reachability</em>, not state.</p>
+    </section>
+
+    <!-- AGENTS -->
+    <section id="agents">
+      <h2 class="anchor-h">The agent library <a class="hash" href="#agents">#</a></h2>
+      <p><code>agents_md/</code> holds the markdown agents in categories. Each is a self-contained playbook (a <code>## User Prompt</code> methodology + <code>## System Prompt</code> strict anti-false-positive rules). <strong>Add your own</strong> by dropping a <code>.md</code> into the matching folder — it's picked up automatically.</p>
+      <table class="doc-table">
+        <thead><tr><th>Category</th><th>Dir</th><th>Count</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Vulnerability specialists</td><td><code>vulns/</code></td><td>241</td><td>exploit a specific class · incl. account registration &amp; form analysis</td></tr>
+          <tr><td>Recon</td><td><code>recon/</code></td><td>12</td><td>information gathering</td></tr>
+          <tr><td>Code (SAST)</td><td><code>code/</code></td><td>78</td><td>white-box source review</td></tr>
+          <tr><td>Infra</td><td><code>infra/</code></td><td>34</td><td>Linux / Windows / AD host testing</td></tr>
+          <tr><td>Chains</td><td><code>chains/</code></td><td>12</td><td>multi-stage exploitation chains</td></tr>
+          <tr><td>AI / LLM</td><td><code>ai/</code></td><td>30</td><td>LLM red-teaming — OWASP LLM Top 10, MCP, jailbreak &amp; prompt-injection</td></tr>
+          <tr><td>Meta</td><td><code>meta/</code></td><td>23</td><td>orchestrator, validator, scorers, reporter, RL</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ASSURANCE -->
+    <section id="assurance">
+      <h2 class="anchor-h">Assurance &amp; authorization <a class="hash" href="#assurance">#</a></h2>
+      <p>A layer of controls that make a run <strong>defensible</strong>, not just productive — all enforced in code (not prompt text), every decision landing in the hash-chained audit trail.</p>
+      <h4>Target authorization gate (default-deny)</h4>
+      <p>Before any recon, the target is checked against the capability grant — protocol, host, port, URL prefix. A signed token that does not cover the target refuses the run and exits non-zero. Loopback (<code>localhost</code>/<code>127.0.0.1</code>) is exempt. Alt-IP encodings (<code>0x7f000001</code>, <code>2130706433</code>…) all normalize, so an exclude can't be dodged, and a DNS-rebinding guard refuses a name that re-resolves to a new internal address.</p>
+      <h4>Evidence-graded CVSS</h4>
+      <p>The score is computed from the FIRST v3.1 equation, and each impact metric is graded against a receipt. SQLi that reached the interpreter but extracted nothing scores <strong>demonstrated 0 / potential 9.8</strong> — never a manufactured critical. The vector travels with the number.</p>
+      <h4>Tooling</h4>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">bash · global flags</span></div>
+<pre><code><span class="tok-flag">--sandbox</span>                              <span class="tok-comment"># run agent commands in a Kali container</span>
+<span class="tok-flag">--intercept</span> burp|caido|zap|mitmproxy   <span class="tok-comment"># route through a tool …</span>
+<span class="tok-flag">--intercept</span> own | own+burp             <span class="tok-comment"># … or the harness's own interceptor</span>
+<span class="tok-flag">--revalidate-poc</span>                       <span class="tok-comment"># re-run each PoC; demote what no longer reproduces</span>
+<span class="tok-flag">--compliance</span> pci-dss,hipaa,soc2,gdpr   <span class="tok-comment"># control mapping in the report</span>
+<span class="tok-flag">--typesafe</span> on|off|auto                 <span class="tok-comment"># calibrated adjudication + confirmation loop</span></code></pre>
+      </div>
+    </section>
+
+    <!-- OUTPUTS -->
+    <section id="outputs">
+      <h2 class="anchor-h">Outputs, reports &amp; artifacts <a class="hash" href="#outputs">#</a></h2>
+      <p>Every run writes a self-contained folder <code>runs/ns-&lt;ts&gt;-&lt;target&gt;/</code>:</p>
+      <table class="doc-table">
+        <thead><tr><th>File</th><th>Contents</th></tr></thead>
+        <tbody>
+          <tr><td><code>report.html · pdf · md</code></td><td>the report (PDF via Typst), secrets redacted, + Mermaid attack-graph</td></tr>
+          <tr><td><code>findings.json / .md</code></td><td>validated findings (raw, for tools &amp; re-testing)</td></tr>
+          <tr><td><code>report.sarif</code></td><td>SARIF 2.1.0 for CI code-scanning</td></tr>
+          <tr><td><code>graph/</code></td><td>attack chains, dependency todolist, Cypher + JSON export</td></tr>
+          <tr><td><code>recon.json · exploitation.md · traces/</code></td><td>surface, transcript, per-agent traces</td></tr>
+          <tr><td><code>pocs/ · evidence/</code></td><td>runnable PoCs and proof screenshots</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Per-project memory &amp; resume:</strong> launching the REPL in a project directory creates <code>&lt;cwd&gt;/.neurosploit/</code> (<code>session.json</code>, <code>runs.json</code>, <code>active_run.json</code>, <code>history.txt</code>). Reopen in the same folder → it resumes automatically. An interrupted run's checkpointed findings are recovered into <code>/runs</code>.</p>
+      <p><strong>Integrations:</strong> GitHub / GitLab PR review gate (<code>neurosploit pr &lt;repo&gt; &lt;n&gt; --fail-on critical</code>), <code>@neurosploit</code> mention bot, one Jira card per finding, MCP server, compliance mapping (PCI-DSS / HIPAA / SOC 2 / GDPR).</p>
+    </section>
+
+    <!-- TROUBLESHOOT -->
+    <section id="troubleshoot">
+      <h2 class="anchor-h">Tips &amp; troubleshooting <a class="hash" href="#troubleshoot">#</a></h2>
+      <ul>
+        <li><strong>No findings on a live target?</strong> It may be unreachable, or the app is genuinely static — the harness refuses to fabricate. Check <code>recon.md</code>.</li>
+        <li><strong>Quick smoke test:</strong> <code>neurosploit run http://x --offline</code> exercises the pipeline without calling any model.</li>
+        <li><strong>Cost control:</strong> start with <code>--max-agents 4 --vote-n 1</code>; scale up later. The router already routes cheap models to recon.</li>
+        <li><strong>Rate limits (subscription):</strong> the harness retries with backoff and caps parallel CLI processes; add more models to the panel or switch to an API key.</li>
+        <li><strong>Run as root:</strong> the harness sets <code>IS_SANDBOX=1</code> so Claude Code's autonomy works.</li>
+        <li><strong>Stuck?</strong> Ctrl-C once for a graceful stop (→ keep/discard report); twice aborts.</li>
+      </ul>
+    </section>
+
+    <!-- REFERENCE -->
+    <section id="reference">
+      <h2 class="anchor-h">Command &amp; flag reference <a class="hash" href="#reference">#</a></h2>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">commands</span></div>
+<pre><code><span class="tok-cmd">neurosploit</span>                       <span class="tok-comment"># interactive REPL (resumes per project)</span>
+<span class="tok-cmd">neurosploit</span> run &lt;url&gt;             <span class="tok-comment"># black-box</span>
+<span class="tok-cmd">neurosploit</span> whitebox &lt;repo&gt;       <span class="tok-comment"># white-box source review</span>
+<span class="tok-cmd">neurosploit</span> greybox &lt;repo&gt; --url &lt;app&gt;   <span class="tok-comment"># code + live</span>
+<span class="tok-cmd">neurosploit</span> host &lt;ip&gt;             <span class="tok-comment"># Linux/Windows/AD (with --creds)</span>
+<span class="tok-cmd">neurosploit</span> aitest &lt;ai-url&gt;       <span class="tok-comment"># AI / LLM red-teaming</span>
+<span class="tok-cmd">neurosploit</span> mobile &lt;app&gt;          <span class="tok-comment"># APK / IPA / binary reverse engineering</span>
+<span class="tok-cmd">neurosploit</span> container &lt;image&gt;     <span class="tok-comment"># OCI image scan + SBOM</span>
+<span class="tok-cmd">neurosploit</span> tui &lt;url&gt;             <span class="tok-comment"># Mission Control TUI (--repo for greybox)</span>
+<span class="tok-cmd">neurosploit</span> graph &lt;run&gt; [--push]  <span class="tok-comment"># attack graph for a finished run (± Neo4j)</span>
+<span class="tok-cmd">neurosploit</span> compliance &lt;run&gt;      <span class="tok-comment"># map onto PCI-DSS/HIPAA/SOC2/GDPR</span>
+<span class="tok-cmd">neurosploit</span> sarif &lt;run&gt;           <span class="tok-comment"># (re)emit report.sarif</span>
+<span class="tok-cmd">neurosploit</span> poc &lt;run&gt;             <span class="tok-comment"># re-validate every finding's recorded proof</span>
+<span class="tok-cmd">neurosploit</span> agents               <span class="tok-comment"># library counts</span>
+<span class="tok-cmd">neurosploit</span> models               <span class="tok-comment"># providers &amp; models</span>
+<span class="tok-cmd">neurosploit</span> mcp                   <span class="tok-comment"># run as an MCP server</span>
+<span class="tok-cmd">neurosploit</span> <span class="tok-flag">--help</span>                <span class="tok-comment"># full help</span></code></pre>
+      </div>
+      <div class="codeblock"><div class="cb-bar"><span class="lang">common flags (run / greybox / host / tui)</span></div>
+<pre><code><span class="tok-flag">--model</span> provider:model   repeatable; 1st = primary, rest = failover + voting jury
+<span class="tok-flag">--subscription</span>           use local CLI login instead of an API key
+<span class="tok-flag">--mcp</span>                    enable Playwright MCP browser (subscription path)
+<span class="tok-flag">--creds</span> &lt;file.yaml&gt;      jwt/header/cookie/login + ssh/windows credentials
+<span class="tok-flag">--focus</span> <span class="tok-str">"&lt;text&gt;"</span>         steer agent selection &amp; execution
+<span class="tok-flag">--vote-n</span> &lt;n&gt;             validator votes per finding (default 3)
+<span class="tok-flag">--max-agents</span> &lt;n&gt;         cap agents (0 = all matching)
+<span class="tok-flag">--scope-file</span> &lt;yaml&gt;      import scope + target/models/focus/classes from one file
+<span class="tok-flag">--compliance</span> &lt;list&gt;      pci-dss,hipaa,soc2,gdpr — control mapping in the report
+<span class="tok-flag">--neo4j</span> &lt;uri&gt;            sync the attack graph to Neo4j (creds via NEO4J_* env)
+<span class="tok-flag">--offline</span>                pipeline self-test, no model calls
+<span class="tok-flag">-v, --verbose</span>            log each agent, recon, votes</code></pre>
+      </div>
+    </section>
+
+    <div class="pager">
+      <a href="index.html"><div class="dir">←</div><div class="ttl">Back to home</div></a>
+      <a class="next" href="https://github.com/JoasASantos/NeuroSploit" target="_blank" rel="noopener"><div class="dir">GitHub →</div><div class="ttl">Source &amp; agent library</div></a>
+    </div>
+
+    <p style="margin-top:40px;color:var(--text-faint);font-family:var(--mono);font-size:12.5px;text-align:center">NeuroSploit — by Joas A Santos &amp; Red Team Leaders. MIT licensed. Authorized testing only.</p>
+
+  </main>
+
+  <!-- ============ RIGHT TOC ============ -->
+  <aside class="toc" id="toc">
+    <p class="toc-title">On this page</p>
+    <nav id="tocNav"></nav>
+  </aside>
+
+</div>
+
+<script src="assets/js/docs.js"></script>
+</body>
+</html>
